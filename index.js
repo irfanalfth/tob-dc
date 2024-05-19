@@ -40,13 +40,67 @@ client.once("ready", async () => {
         },
         {
           name: "email",
-          description: "email yang lu pake",
+          description: "email yang lu daftarin",
           type: 3,
           required: false,
         },
         {
           name: "username",
-          description: "username yang lu pake",
+          description: "username yang lu daftarin",
+          type: 3,
+          required: false,
+        },
+        {
+          name: "nohp",
+          description: "nomer yang lu daftarin",
+          type: 3,
+          required: false,
+        },
+        {
+          name: "password",
+          description: "password biar lu gk lupa",
+          type: 3,
+          required: false,
+        },
+        {
+          name: "link-reff",
+          description: "kalo ada link reff",
+          type: 3,
+          required: false,
+        },
+      ],
+    },
+    {
+      name: "maruk",
+      description: "Nuyul Garapan (isi kolom yang perlu aja)",
+      options: [
+        {
+          name: "nama-channel",
+          description: "nama garapannya apa",
+          type: 7,
+          required: true,
+        },
+        {
+          name: "wallet",
+          description: "pharse wallet biar gk lupa",
+          type: 3,
+          required: false,
+        },
+        {
+          name: "email",
+          description: "email yang lu daftarin",
+          type: 3,
+          required: false,
+        },
+        {
+          name: "username",
+          description: "username yang lu daftarin",
+          type: 3,
+          required: false,
+        },
+        {
+          name: "nohp",
+          description: "nomer yang lu daftarin",
           type: 3,
           required: false,
         },
@@ -87,16 +141,17 @@ client.on("interactionCreate", async (interaction) => {
       (channel) => channel.type === type && channel.name === name
     );
 
-    if (ch.size === 0) {
-      console.log(`[${guild.name}] There are no channel in this guild.`);
-      return await interaction.reply("There are no channel in this guild.");
-    }
-
     return ch;
   };
 
   if (channel.name !== "command-tobrt") {
     let ch = await checkChannel(0, "command-tobrt");
+
+    if (ch.size === 0) {
+      console.log(`[${guild.name}] There are no channel in this guild.`);
+
+      return await interaction.reply("There are no channel in this guild.");
+    }
 
     return await interaction.reply(
       `Perintah ini hanya bisa dilakukan di saluran <#${ch.id}>.`
@@ -122,7 +177,7 @@ client.on("interactionCreate", async (interaction) => {
       console.log(`[${guild.name}] Generate #garapan-${usernameDiscord}.`);
 
       return await interaction.reply(
-        `Kategori **garapan-${usernameDiscord}** gk ada, tapi sekarang udah ada 😮‍💨 isi ulang garapan yang mau lu catet`
+        `Kategori __**garapan-${usernameDiscord}**__ gk ada, tapi sekarang udah ada 😮‍💨 __isi ulang garapan yang mau lu catet__`
       );
     }
 
@@ -136,10 +191,32 @@ client.on("interactionCreate", async (interaction) => {
       console.log(`[${guild.name}] Generate #${nama}.`);
 
       await newChannel.send(
-        `# ${nama}\n\n > wallet : ||${wallet}||\n > email : ${email}\n > username : ${username}\n > password : ||${password}||\n > link reff : ${linkReff}`
+        `# ${nama}\n\n > wallet : \`${wallet}\`\n > email : \`${email}\`\n > username : \`${username}\`\n > password : \`${password}\`\n > link reff : \`${linkReff}\``
       );
 
-      await interaction.reply(`Udah ku catet garapan **${nama}** mu`);
+      await interaction.reply(`Udah ku catet garapan __**${nama}**__ mu`);
+    } catch (error) {
+      console.error("Error creating channel:", error);
+      await interaction.reply("There was an error creating the channel.");
+    }
+  } else if (commandName === "maruk") {
+    const channel = options.getChannel("nama-channel");
+    const wallet = checkEmpty(options.getString("wallet"));
+    const email = checkEmpty(options.getString("email"));
+    const username = checkEmpty(options.getString("username"));
+    const password = checkEmpty(options.getString("password"));
+    const linkReff = checkEmpty(options.getString("link-reff"));
+
+    try {
+      console.log(`[${guild.name}] Add new to #${channel.name}.`);
+
+      await channel.send(
+        `> wallet : \`${wallet}\`\n > email : \`${email}\`\n > username : \`${username}\`\n > password : \`${password}\`\n > link reff : \`${linkReff}\``
+      );
+
+      await interaction.reply(
+        `Udah ku tambahin di garapan __**${channel.name}**__ mu`
+      );
     } catch (error) {
       console.error("Error creating channel:", error);
       await interaction.reply("There was an error creating the channel.");
