@@ -88,6 +88,7 @@ client.on("interactionCreate", async (interaction) => {
     );
 
     if (ch.size === 0) {
+      console.log(`[${guild.name}] There are no channel in this guild.`);
       return await interaction.reply("There are no channel in this guild.");
     }
 
@@ -118,6 +119,8 @@ client.on("interactionCreate", async (interaction) => {
         type: ChannelType.GuildCategory,
       });
 
+      console.log(`[${guild.name}] Generate #garapan-${usernameDiscord}.`);
+
       return await interaction.reply(
         `Kategori **garapan-${usernameDiscord}** gk ada, tapi sekarang udah ada 😮‍💨 isi ulang garapan yang mau lu catet`
       );
@@ -129,6 +132,8 @@ client.on("interactionCreate", async (interaction) => {
         type: ChannelType.GuildText,
         parent: category.id,
       });
+
+      console.log(`[${guild.name}] Generate #${nama}.`);
 
       await newChannel.send(
         `# ${nama}\n\n > wallet : ||${wallet}||\n > email : ${email}\n > username : ${username}\n > password : ||${password}||\n > link reff : ${linkReff}`
@@ -148,6 +153,8 @@ client.on("guildCreate", async (guild) => {
       name: "command-tobrt",
       type: ChannelType.GuildText,
     });
+
+    console.log(`[${guild.name}] Generate #command-tobrt.`);
   } catch (error) {
     console.error("Error", error);
   }
